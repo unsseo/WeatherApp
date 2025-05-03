@@ -88,43 +88,14 @@ public class WeatherWeekActivity extends AppCompatActivity {
             String highTemp = (20 + i) + "°C";
             List<Entry> hourlyTemps = (i % 2 == 0) ? dummyHourlyTemps1 : dummyHourlyTemps2;
 
-            weekList.add(new WeatherData(day, lowTemp, highTemp, R.drawable.ic_weather_sun, hourlyTemps));
+            weekList.add(new WeatherData(day, lowTemp, highTemp, R.drawable.ic_weather_sun));
         }
 
         adapter = new WeatherAdapter(weekList);
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new WeatherAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(WeatherData data) {
-                showChartPopup(data);
-            }
-        });
     }
 
     // 팝업 다이얼로그로 차트 띄우기
-    private void showChartPopup(WeatherData data) {
-        Dialog dialog = new Dialog(WeatherWeekActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.popup_chart);
-        dialog.setCancelable(true);
 
-        LineChart chart = dialog.findViewById(R.id.popup_line_chart);
-        Button closeBtn = dialog.findViewById(R.id.btn_close);
-
-        LineDataSet dataSet = new LineDataSet(data.getHourlyTemperatures(), data.getDay() + " Hourly Temps");
-        dataSet.setColor(Color.GREEN);
-        dataSet.setLineWidth(2f);
-        dataSet.setCircleRadius(4f);
-        dataSet.setValueTextSize(10f);
-        dataSet.setDrawCircles(true);
-        dataSet.setDrawValues(true);
-
-        chart.setData(new LineData(dataSet));
-        chart.invalidate();
-
-        closeBtn.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
-    }
 }
