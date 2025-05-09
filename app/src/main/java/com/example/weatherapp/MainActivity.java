@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         youtubePlayerView = findViewById(R.id.youtube_player_view);
-        getLifecycle().addObserver(youtubePlayerView);  // 이것만 있으면 됨
+        getLifecycle().addObserver(youtubePlayerView);
 
         // 날씨 기반 유튜브 검색 실행
         getWeatherAndSearchVideos();
