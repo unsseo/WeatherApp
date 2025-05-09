@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
             android:clipToPadding="false"
+            android:textStyle="bold"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:paddingStart="8dp"
