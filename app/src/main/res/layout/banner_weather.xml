@@ -19,7 +19,6 @@
         android:id="@+id/weatherText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="오늘은 맑아요! 산책하기 좋은 날 ☀️"
         android:textSize="16sp"
         android:layout_marginStart="12dp"
         android:textColor="#000000"/>
