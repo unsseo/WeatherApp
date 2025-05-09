@@ -8,6 +8,6 @@
         <string name="fri">Fri</string>
         <string name="sat">Sat</string>
         <string name="sun">Sun</string>
-        <string name="도씨">°C</string>
+        <string name="celcius">°C</string>
 
 </resources>

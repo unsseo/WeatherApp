@@ -43,15 +43,15 @@ public class WeatherWeekActivity extends AppCompatActivity {
 
         String[] tempLows  = {"14", "13", "11", "7", "18", "9", "12"};
         String[] tempHighs = {"20", "19", "17", "12", "25", "15", "18"};
-        String 도씨 = getString(R.string.도씨);
+        String c = getString(R.string.celcius);
 
         weekList = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             int dayIdx = (todayIndex + i) % 7;
             weekList.add(new WeatherData(
                     orderedDays.get(i),
-                    tempLows[dayIdx]+ 도씨 ,
-                    tempHighs[dayIdx] + 도씨 ,
+                    tempLows[dayIdx]+ c ,
+                    tempHighs[dayIdx] + c ,
                     iconResIds[dayIdx]
             ));
         }
