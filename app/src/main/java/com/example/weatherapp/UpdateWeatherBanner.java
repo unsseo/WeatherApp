@@ -16,7 +16,6 @@ import android.content.pm.PackageManager;
 import androidx.core.content.ContextCompat;
 import android.os.Build;
 
-
 public class UpdateWeatherBanner {
 
     public void updateWeatherBanner(String weather, LinearLayout bannerLayout, ImageView weatherIcon, TextView weatherText) {
@@ -48,7 +47,6 @@ public class UpdateWeatherBanner {
     }
 
     public void showWeatherNotification(Context context, String weather) {
-        // Android 8.0 이상에서 알림 채널을 만들어야 합니다.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Weather Channel";
             String description = "Weather updates and notifications";
@@ -65,7 +63,6 @@ public class UpdateWeatherBanner {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
-                // 권한이 없으면 알림 보내지 않음
                 return;
             }
         }
@@ -107,5 +104,4 @@ public class UpdateWeatherBanner {
 
         notificationManager.notify(1001, builder.build());
     }
-
 }

@@ -14,17 +14,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
 
     private List<WeatherData> weatherList;
 
-    // ✅ 인터페이스 정의
-    public interface OnItemClickListener {
-        void onItemClick(WeatherData data);
-    }
-
-    private OnItemClickListener listener;
-
-    // ✅ setter 추가
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView dayText, tempLow, tempHigh;
@@ -58,12 +47,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.ViewHold
         holder.tempHigh.setText(data.getTempHigh());
         holder.weatherIcon.setImageResource(data.getIconResId());
 
-        // ✅ 클릭 이벤트 연결
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onItemClick(data);
-            }
-        });
     }
 
     @Override

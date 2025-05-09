@@ -5,27 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5"
-    android:padding="16dp">
+    android:background="@drawable/weather_bg"
+    android:padding="0dp">
 
+    <!-- 주간 날씨 타이틀: 카드뷰 밖에 배치 -->
     <TextView
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="주간 날씨"
-        android:textSize="20sp"
+        android:textSize="27.sp"
         android:textStyle="bold"
-        android:textColor="#333"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="12dp" />
+        android:textColor="#8DC3B8"
+        android:layout_marginTop="36dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="12dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/weather_card"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical"
-        android:clipToPadding="false"
-        android:paddingBottom="8dp" />
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardUseCompatPadding="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="0dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp" />
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

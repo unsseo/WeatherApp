@@ -1,19 +1,9 @@
 package com.example.weatherapp;
 
-import android.app.Dialog;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Window;
-import android.widget.Button;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,79 +13,87 @@ import java.util.Locale;
 
 public class WeatherWeekActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+
     private WeatherAdapter adapter;
     private List<WeatherData> weekList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        RecyclerView recyclerView;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_week);
 
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // 요일 리스트
         String[] allDays = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        int todayIndex = getTodayIndex(allDays);
+        List<String> orderedDays = getOrderedDays(allDays, todayIndex);
 
-        // 오늘 요일 구하기
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE", Locale.ENGLISH);
-        String today = sdf.format(calendar.getTime()); // 예: "Tue"
+        int[] iconResIds = {
+                R.drawable.ic_weather_sun,
+                R.drawable.ic_weather_cloud,
+                R.drawable.ic_weather_rain,
+                R.drawable.ic_weather_snow,
+                R.drawable.ic_weather_rain,
+                R.drawable.ic_weather_cloud,
+                R.drawable.ic_weather_rain
+        };
 
-        // 오늘 요일 인덱스
-        int todayIndex = -1;
-        for (int i = 0; i < allDays.length; i++) {
-            if (allDays[i].equals(today)) {
-                todayIndex = i;
-                break;
-            }
-        }
+        String[] tempLows  = {"14", "13", "11", "7", "18", "9", "12"};
+        String[] tempHighs = {"20", "19", "17", "12", "25", "15", "18"};
+        String 도씨 = getString(R.string.도씨);
 
-        // 주간 요일 순서 리스트 만들기
-        List<String> orderedDays = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            int index = (todayIndex + i) % 7;
-            orderedDays.add(allDays[index]);
-        }
-
-        // 더미 온도 데이터 (2세트)
-        List<Entry> dummyHourlyTemps1 = new ArrayList<>();
-        dummyHourlyTemps1.add(new Entry(0, 15));
-        dummyHourlyTemps1.add(new Entry(3, 16));
-        dummyHourlyTemps1.add(new Entry(6, 18));
-        dummyHourlyTemps1.add(new Entry(9, 21));
-        dummyHourlyTemps1.add(new Entry(12, 24));
-        dummyHourlyTemps1.add(new Entry(15, 23));
-        dummyHourlyTemps1.add(new Entry(18, 20));
-        dummyHourlyTemps1.add(new Entry(21, 17));
-
-        List<Entry> dummyHourlyTemps2 = new ArrayList<>();
-        dummyHourlyTemps2.add(new Entry(0, 13));
-        dummyHourlyTemps2.add(new Entry(3, 14));
-        dummyHourlyTemps2.add(new Entry(6, 15));
-        dummyHourlyTemps2.add(new Entry(9, 18));
-        dummyHourlyTemps2.add(new Entry(12, 21));
-        dummyHourlyTemps2.add(new Entry(15, 20));
-        dummyHourlyTemps2.add(new Entry(18, 17));
-        dummyHourlyTemps2.add(new Entry(21, 15));
-
-        // 날씨 데이터 생성
         weekList = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            String day = orderedDays.get(i);
-            String lowTemp = (14 + i) + "°C";
-            String highTemp = (20 + i) + "°C";
-            List<Entry> hourlyTemps = (i % 2 == 0) ? dummyHourlyTemps1 : dummyHourlyTemps2;
-
-            weekList.add(new WeatherData(day, lowTemp, highTemp, R.drawable.ic_weather_sun));
+            int dayIdx = (todayIndex + i) % 7;
+            weekList.add(new WeatherData(
+                    orderedDays.get(i),
+                    tempLows[dayIdx]+ 도씨 ,
+                    tempHighs[dayIdx] + 도씨 ,
+                    iconResIds[dayIdx]
+            ));
         }
 
         adapter = new WeatherAdapter(weekList);
         recyclerView.setAdapter(adapter);
 
+        // 오늘의 날씨 데이터 추출 (리스트 첫 번째가 오늘)
+        WeatherData todayWeather = weekList.get(0);
+        int todayIconResId = todayWeather.getIconResId();
+        String weatherType = getWeatherTypeFromIcon(todayIconResId);
+
+        // 알림(배너)만 노출
+        UpdateWeatherBanner updater = new UpdateWeatherBanner();
+        updater.showWeatherNotification(this, weatherType);
     }
 
-    // 팝업 다이얼로그로 차트 띄우기
+    private int getTodayIndex(String[] allDays) {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE", Locale.ENGLISH);
+        String today = sdf.format(calendar.getTime());
+        for (int i = 0; i < allDays.length; i++) {
+            if (allDays[i].equals(today)) return i;
+        }
+        return 0;
+    }
 
+    private List<String> getOrderedDays(String[] allDays, int todayIndex) {
+        List<String> ordered = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            int idx = (todayIndex + i) % 7;
+            ordered.add(allDays[idx]);
+        }
+        return ordered;
+    }
+
+    // 아이콘 리소스 → 날씨 문자열 변환 함수
+    private String getWeatherTypeFromIcon(int iconResId) {
+        if (iconResId == R.drawable.ic_weather_sun) return "sunny";
+        if (iconResId == R.drawable.ic_weather_cloud) return "cloudy";
+        if (iconResId == R.drawable.ic_weather_rain) return "rainy";
+        if (iconResId == R.drawable.ic_weather_snow) return "snow";
+        return "sunny";
+    }
 }

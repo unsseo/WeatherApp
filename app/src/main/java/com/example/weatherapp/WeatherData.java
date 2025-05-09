@@ -1,9 +1,5 @@
 package com.example.weatherapp;
 
-import com.github.mikephil.charting.data.Entry;
-
-import java.util.List;
-
 public class WeatherData {
     private String day;
     private String tempLow;
