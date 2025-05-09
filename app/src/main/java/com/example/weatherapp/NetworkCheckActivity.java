@@ -36,12 +36,14 @@ public class NetworkCheckActivity extends AppCompatActivity {
                 if (network != null) {
                     NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
                     if (capabilities != null) {
-                        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+                        // 실제 인터넷 연결이 가능한 네트워크인지 확인
+                        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                                && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
                     }
                 }
-            } else {
-                android.net.NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-                return activeNetwork != null && activeNetwork.isConnected();
+                return false;
             }
         }
         return false;
