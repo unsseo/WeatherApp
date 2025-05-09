@@ -2,13 +2,8 @@ package com.example.weatherapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class BannerActivity extends AppCompatActivity {
@@ -25,24 +20,5 @@ public class BannerActivity extends AppCompatActivity {
             }
         }
 
-        // UI 요소 참조
-        LinearLayout bannerLayout = findViewById(R.id.bannerLayout);
-        ImageView weatherIcon = findViewById(R.id.weatherIcon);
-        TextView weatherText = findViewById(R.id.weatherText);
-
-        String weatherType = getIntent().getStringExtra("weather_type");
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 101) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                UpdateWeatherBanner updater = new UpdateWeatherBanner();
-                String weatherType = getIntent().getStringExtra("weather_type");
-                updater.showWeatherNotification(this, weatherType != null ? weatherType : "sunny");
-            }
-        }
     }
 }

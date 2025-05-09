@@ -21,9 +21,6 @@ import android.Manifest;
 
 public class WeatherWeekActivity extends AppCompatActivity {
 
-
-    private WeatherAdapter adapter;
-    private List<WeatherData> weekList;
     private String weatherType;
 
 
@@ -55,7 +52,7 @@ public class WeatherWeekActivity extends AppCompatActivity {
         String[] tempHighs = {"20", "19", "17", "12", "25", "15", "18"};
         String c = getString(R.string.celcius);
 
-        weekList = new ArrayList<>();
+        List<WeatherData> weekList = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             int dayIdx = (todayIndex + i) % 7;
             weekList.add(new WeatherData(
@@ -65,7 +62,7 @@ public class WeatherWeekActivity extends AppCompatActivity {
                     iconResIds[dayIdx]
             ));
         }
-        adapter = new WeatherAdapter(weekList);
+        WeatherAdapter adapter = new WeatherAdapter(weekList);
         recyclerView.setAdapter(adapter);
 
         // 오늘의 날씨 데이터 추출 (리스트 첫 번째가 오늘)
@@ -108,11 +105,9 @@ public class WeatherWeekActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 101) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 new UpdateWeatherBanner().showWeatherNotification(this, weatherType);
             }
         }
-
     }
 
     private int getTodayIndex(String[] allDays) {
