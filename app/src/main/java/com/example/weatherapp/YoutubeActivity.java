@@ -13,6 +13,10 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -21,27 +25,24 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class YoutubeActivity extends AppCompatActivity {
     private YouTubePlayerView youtubePlayerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.youtube);
         youtubePlayerView = findViewById(R.id.youtube_player_view);
         getLifecycle().addObserver(youtubePlayerView);
 
-        // 날씨 기반 유튜브 검색 실행
-        getWeatherAndSearchVideos();
-    }
+        // WeatherWeekActivity에서 전달받은 날씨 타입 받기
+        String weatherType = getIntent().getStringExtra("weather_type");
+        if (weatherType == null) weatherType = "sunny"; // 기본값
 
-    private void getWeatherAndSearchVideos() {
-        // 날씨 정보를 임의의 데이터로 설정 (향후 API 연동 시 위치 기반 데이터 사용)
-        String weatherCondition = "rain"; // 예: 비오는 날
-        String searchKeyword = weatherCondition + " playlist"; // 키워드 생성
+        // 날씨 타입을 YouTube 검색 키워드로 변환 (필요시)
+        String searchKeyword = weatherType + " playlist"; // 예: "rainy playlist"
 
-        // 백엔드 API로 검색
+        // YouTube 검색 실행
         fetchVideosFromBackend(searchKeyword);
     }
 
@@ -69,12 +70,34 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     YouTubeSearchResponse youtubeResponse = response.body();
 
-                    // 응답 내용을 로그로 출력
-                    Log.d("API Response", "Response Body: " + youtubeResponse.getItems());
+                    // 1. 비디오만 추출
+                    // 1. 비디오만 추출
+                    List<YouTubeSearchResponse.Item> videoItems = new ArrayList<>();
+                    for (YouTubeSearchResponse.Item item : youtubeResponse.getItems()) {
+                        if (item.getId() != null && item.getId().getVideoId() != null) {
+                            videoItems.add(item);
+                        }
+                    }
 
-                    if (youtubeResponse.getItems() != null && !youtubeResponse.getItems().isEmpty()) {
-                        String videoId = youtubeResponse.getItems().get(0).getId().getVideoId();  // 수정된 부분
+                    // 2. 랜덤 선택
+                    if (!videoItems.isEmpty()) {
+                        Random random = new Random();
+                        int randomIndex = random.nextInt(videoItems.size());
+                        String videoId = videoItems.get(randomIndex).getId().getVideoId();
                         showVideo(videoId);
+                    } else {
+                        Toast.makeText(YoutubeActivity.this, "검색 결과에 비디오가 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    // 2. 랜덤 선택
+                    if (!videoItems.isEmpty()) {
+                        Random random = new Random();
+                        int randomIndex = random.nextInt(videoItems.size());
+                        String videoId = videoItems.get(randomIndex).getId().getVideoId();
+                        showVideo(videoId);
+                    } else {
+                        Toast.makeText(YoutubeActivity.this, "검색 결과에 비디오가 없습니다.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.e("API Error", "Response was unsuccessful or body is null");
@@ -83,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<YouTubeSearchResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "백엔드 API 요청 실패", Toast.LENGTH_SHORT).show();
+                Toast.makeText(YoutubeActivity.this, "백엔드 API 요청 실패", Toast.LENGTH_SHORT).show();
                 Log.e("RetrofitError", "API 요청 실패", t);
             }
         });

@@ -1,0 +1,188 @@
+[1mdiff --git a/.env b/.env[m
+[1mdeleted file mode 100644[m
+[1mindex 7dc3646..0000000[m
+[1m--- a/.env[m
+[1m+++ /dev/null[m
+[36m@@ -1 +0,0 @@[m
+[31m-YOUTUBE_API_KEY = AIzaSyAU7f_gIf4-WTlf2d3cr1fz86nlrkzJ5bo[m
+[1mdiff --git a/app/build.gradle.kts b/app/build.gradle.kts[m
+[1mindex 4826c52..e579111 100644[m
+[1m--- a/app/build.gradle.kts[m
+[1m+++ b/app/build.gradle.kts[m
+[36m@@ -1,6 +1,5 @@[m
+ plugins {[m
+     id("com.android.application")[m
+[31m-    id("com.google.gms.google-services")[m
+ }[m
+ [m
+ android {[m
+[36m@@ -32,21 +31,10 @@[m [mandroid {[m
+ dependencies {[m
+ [m
+     implementation("androidx.appcompat:appcompat:1.7.0")[m
+[31m-    //implementation ("androidx.recyclerview:recyclerview:1.2.1")[m
+     implementation("com.google.android.material:material:1.12.0")[m
+     testImplementation("junit:junit:4.13.2")[m
+     androidTestImplementation("androidx.test.ext:junit:1.2.1")[m
+     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")[m
+ [m
+[31m-    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.0")[m
+[31m-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")[m
+[31m-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")[m
+[31m-    implementation ("com.squareup.okhttp3:okhttp:4.9.0")[m
+[31m-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")[m
+[31m-[m
+[31m-[m
+     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")[m
+[31m-    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))[m
+[31m-    implementation("com.google.firebase:firebase-analytics")[m
+[31m-[m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/app/google-services.json b/app/google-services.json[m
+[1mdeleted file mode 100644[m
+[1mindex b018410..0000000[m
+[1m--- a/app/google-services.json[m
+[1m+++ /dev/null[m
+[36m@@ -1,29 +0,0 @@[m
+[31m-{[m
+[31m-  "project_info": {[m
+[31m-    "project_number": "437433186920",[m
+[31m-    "project_id": "weatherapp-bf86d",[m
+[31m-    "storage_bucket": "weatherapp-bf86d.firebasestorage.app"[m
+[31m-  },[m
+[31m-  "client": [[m
+[31m-    {[m
+[31m-      "client_info": {[m
+[31m-        "mobilesdk_app_id": "1:437433186920:android:8ecdbdd5f9a65b7df4d9dd",[m
+[31m-        "android_client_info": {[m
+[31m-          "package_name": "com.example.weatherapp"[m
+[31m-        }[m
+[31m-      },[m
+[31m-      "oauth_client": [],[m
+[31m-      "api_key": [[m
+[31m-        {[m
+[31m-          "current_key": "AIzaSyDm__OJarLuElc1e1Zdl01vGHDyQRUJ7W0"[m
+[31m-        }[m
+[31m-      ],[m
+[31m-      "services": {[m
+[31m-        "appinvite_service": {[m
+[31m-          "other_platform_oauth_client": [][m
+[31m-        }[m
+[31m-      }[m
+[31m-    }[m
+[31m-  ],[m
+[31m-  "configuration_version": "1"[m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml[m
+[1mindex 75b9cc8..8368bbb 100644[m
+[1m--- a/app/src/main/AndroidManifest.xml[m
+[1m+++ b/app/src/main/AndroidManifest.xml[m
+[36m@@ -3,13 +3,7 @@[m
+     xmlns:tools="http://schemas.android.com/tools"[m
+     package="com.example.weatherapp">[m
+ [m
+[31m-    <uses-permission android:name="android.permission.INTERNET" />[m
+[31m-[m
+[31m-[m
+     <application[m
+[31m-[m
+[31m-        android:networkSecurityConfig="@xml/network_security_config"[m
+[31m-[m
+         android:allowBackup="true"[m
+         android:dataExtractionRules="@xml/data_extraction_rules"[m
+         android:fullBackupContent="@xml/backup_rules"[m
+[36m@@ -21,7 +15,7 @@[m
+         tools:targetApi="31">[m
+ [m
+         <activity[m
+[31m-            android:name= ".MainActivity"[m
+[32m+[m[32m            android:name=".WeatherWeekActivity"[m
+             android:exported="true">[m
+ [m
+             <intent-filter>[m
+[1mdiff --git a/app/src/main/java/com/example/weatherapp/MainActivity.java b/app/src/main/java/com/example/weatherapp/MainActivity.java[m
+[1mdeleted file mode 100644[m
+[1mindex dc1dbc8..0000000[m
+[1m--- a/app/src/main/java/com/example/weatherapp/MainActivity.java[m
+[1m+++ /dev/null[m
+[36m@@ -1,107 +0,0 @@[m
+[31m-package com.example.weatherapp;[m
+[31m-[m
+[31m-import android.content.Intent;[m
+[31m-import android.net.Uri;[m
+[31m-import android.os.Bundle;[m
+[31m-import android.util.Log;[m
+[31m-import android.widget.Toast;[m
+[31m-[m
+[31m-import androidx.annotation.NonNull;[m
+[31m-import androidx.appcompat.app.AppCompatActivity;[m
+[31m-[m
+[31m-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;[m
+[31m-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;[m
+[31m-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;[m
+[31m-[m
+[31m-import okhttp3.OkHttpClient;[m
+[31m-import okhttp3.logging.HttpLoggingInterceptor;[m
+[31m-import retrofit2.Call;[m
+[31m-import retrofit2.Callback;[m
+[31m-import retrofit2.Response;[m
+[31m-import retrofit2.Retrofit;[m
+[31m-import retrofit2.converter.gson.GsonConverterFactory;[m
+[31m-[m
+[31m-public class MainActivity extends AppCompatActivity {[m
+[31m-    private YouTubePlayerView youtubePlayerView;[m
+[31m-[m
+[31m-    @Override[m
+[31m-    protected void onCreate(Bundle savedInstanceState) {[m
+[31m-        super.onCreate(savedInstanceState);[m
+[31m-        setContentView(R.layout.activity_main);[m
+[31m-[m
+[31m-        youtubePlayerView = findViewById(R.id.youtube_player_view);[m
+[31m-        getLifecycle().addObserver(youtubePlayerView);  // 이것만 있으면 됨[m
+[31m-[m
+[31m-        // 날씨 기반 유튜브 검색 실행[m
+[31m-        getWeatherAndSearchVideos();[m
+[31m-    }[m
+[31m-[m
+[31m-    private void getWeatherAndSearchVideos() {[m
+[31m-        // 날씨 정보를 임의의 데이터로 설정 (향후 API 연동 시 위치 기반 데이터 사용)[m
+[31m-        String weatherCondition = "rain"; // 예: 비오는 날[m
+[31m-        String searchKeyword = weatherCondition + " playlist"; // 키워드 생성[m
+[31m-[m
+[31m-        // 백엔드 API로 검색[m
+[31m-        fetchVideosFromBackend(searchKeyword);[m
+[31m-    }[m
+[31m-[m
+[31m-    private void fetchVideosFromBackend(String query) {[m
+[31m-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();[m
+[31m-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);[m
+[31m-[m
+[31m-        OkHttpClient client = new OkHttpClient.Builder()[m
+[31m-                .addInterceptor(interceptor)[m
+[31m-                .build();[m
+[31m-[m
+[31m-        Retrofit retrofit = new Retrofit.Builder()[m
+[31m-                .baseUrl("http://10.0.2.2:3000/")  // 백엔드 서버 URL (에뮬레이터에서 로컬 서버 접근용)[m
+[31m-                .addConverterFactory(GsonConverterFactory.create())[m
+[31m-                .build();[m
+[31m-[m
+[31m-        YouTubeApiService apiService = retrofit.create(YouTubeApiService.class);[m
+[31m-[m
+[31m-        // 백엔드에 쿼리만 전달[m
+[31m-        Call<YouTubeSearchResponse> call = apiService.searchVideos(query);  // 1개의 인자만 전달[m
+[31m-[m
+[31m-        call.enqueue(new Callback<YouTubeSearchResponse>() {[m
+[31m-            @Override[m
+[31m-            public void onResponse(Call<YouTubeSearchResponse> call, Response<YouTubeSearchResponse> response) {[m
+[31m-                if (response.isSuccessful() && response.body() != null) {[m
+[31m-                    YouTubeSearchResponse youtubeResponse = response.body();[m
+[31m-[m
+[31m-                    // 응답 내용을 로그로 출력[m
+[31m-                    Log.d("API Response", "Response Body: " + youtubeResponse.getItems());[m
+[31m-[m
+[31m-                    if (youtubeResponse.getItems() != null && !youtubeResponse.getItems().isEmpty()) {[m
+[31m-                        String videoId = youtubeResponse.getItems().get(0).getId().getVideoId();  // 수정된 부분[m
+[31m-                        showVideo(videoId);[m
+[31m-                  
