@@ -10,7 +10,6 @@ public class YouTubeSearchResponse {
 
     public static class Item {
         private Id id;
-        private Snippet snippet;
 
         public Id getId() {
             return id;
