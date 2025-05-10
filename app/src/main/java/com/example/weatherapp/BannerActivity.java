@@ -19,6 +19,5 @@ public class BannerActivity extends AppCompatActivity {
                 requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
-
     }
 }

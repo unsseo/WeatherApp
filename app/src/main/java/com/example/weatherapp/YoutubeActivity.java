@@ -1,16 +1,21 @@
 package com.example.weatherapp;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerUtils;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
@@ -27,6 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class YoutubeActivity extends AppCompatActivity {
     private YouTubePlayerView youtubePlayerView;
+    private YouTubePlayer youTubePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +77,12 @@ public class YoutubeActivity extends AppCompatActivity {
                     YouTubeSearchResponse youtubeResponse = response.body();
 
                     // 1. 비디오만 추출
-                    // 1. 비디오만 추출
                     List<YouTubeSearchResponse.Item> videoItems = new ArrayList<>();
                     for (YouTubeSearchResponse.Item item : youtubeResponse.getItems()) {
                         if (item.getId() != null && item.getId().getVideoId() != null) {
                             videoItems.add(item);
                         }
                     }
-
-                    // 2. 랜덤 선택
-                    if (!videoItems.isEmpty()) {
-                        Random random = new Random();
-                        int randomIndex = random.nextInt(videoItems.size());
-                        String videoId = videoItems.get(randomIndex).getId().getVideoId();
-                        showVideo(videoId);
-                    } else {
-                        Toast.makeText(YoutubeActivity.this, "검색 결과에 비디오가 없습니다.", Toast.LENGTH_SHORT).show();
-                    }
-
 
                     // 2. 랜덤 선택
                     if (!videoItems.isEmpty()) {
@@ -112,19 +106,28 @@ public class YoutubeActivity extends AppCompatActivity {
         });
     }
 
-
+    // videoId로 영상 재생 (앱 있으면 앱으로, 없으면 내장 플레이어)
     private void showVideo(String videoId) {
-        youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(videoId, 0);
-            }
-        });
+        // 유튜브 앱/웹으로 바로 이동
+        openYouTubeLink(videoId);
     }
 
-    // YouTube 링크로 이동하기
+    // 유튜브 앱(혹은 웹)으로 이동
     private void openYouTubeLink(String videoId) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoId));
-        startActivity(intent);
+        // 1) 웹 URL 사용 + 패키지 명시적 지정
+        Intent appIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://www.youtube.com/watch?v=" + videoId));
+        appIntent.setPackage("com.google.android.youtube"); // 핵심 수정 부분
+
+        // 2) 유튜브 앱이 있으면 실행
+        if (appIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(appIntent);
+        }
+        // 3) 없으면 웹으로 fallback
+        else {
+            Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.youtube.com/watch?v=" + videoId));
+            startActivity(webIntent);
+        }
     }
 }

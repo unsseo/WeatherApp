@@ -44,7 +44,7 @@ public class WeatherWeekActivity extends AppCompatActivity {
                 R.drawable.ic_weather_rain,
                 R.drawable.ic_weather_snow,
                 R.drawable.ic_weather_cloud,
-                R.drawable.ic_weather_cloud,
+                R.drawable.ic_weather_sun,
                 R.drawable.ic_weather_rain
         };
 
@@ -86,7 +86,7 @@ public class WeatherWeekActivity extends AppCompatActivity {
 
 
 
-        //홈화면에서 해야 됨
+        //홈화면에서 해야 됨, 배너 알림
 
         // Android 13 이상 권한 체크 및 요청
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {

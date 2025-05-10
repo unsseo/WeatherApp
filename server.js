@@ -21,11 +21,23 @@ app.get('/youtube/v3/search', async (req, res) => {   // 경로 수정
             params: {
                 key: API_KEY,
                 part: 'snippet',
-                q: query
+                q: query,
+                type: 'video'
             }
         });
-        console.log("YouTube API 응답:", response.data);
-        res.json(response.data);
+         const simplifiedItems = response.data.items.map(item => ({
+            id: {
+                videoId: item.id.videoId // Android가 기대하는 구조에 맞춤
+            },
+            snippet: {
+                title: item.snippet.title
+            }
+        }));
+
+        // 변환된 데이터 전송
+        res.json({
+            items: simplifiedItems // Android가 요구하는 필드명 유지
+        });
     } catch (error) {
         if (error.response) {
             console.error('API 요청 오류:', error.response.status, error.response.data);

@@ -3,31 +3,30 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class YouTubeSearchResponse {
-
-
-    @SerializedName("items")
-    private List<Item> items;  // ✅ 이 필드가 없어서 에러가 난 거야
+    private List<Item> items;
 
     public List<Item> getItems() {
         return items;
     }
 
     public static class Item {
-        @SerializedName("id")
         private Id id;
+        private Snippet snippet;
 
         public Id getId() {
             return id;
         }
-    }
 
-    public static class Id {
-        @SerializedName("videoId")
-        private String videoId;
+        public static class Id {
+            private String videoId;
+            public String getVideoId() {
+                return videoId;
+            }
+        }
 
-        public String getVideoId() {
-            return videoId;
+        public static class Snippet {
+            private String title;
+            // 기타 필요한 필드 추가
         }
     }
-
 }
