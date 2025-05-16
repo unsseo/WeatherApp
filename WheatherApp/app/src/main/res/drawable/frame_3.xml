@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="369dp"
+    android:height="236dp"
+    android:viewportWidth="369"
+    android:viewportHeight="236">
+
+    <!-- 라운드된 배경 사각형 -->
+    <path
+        android:name="rounded_rect"
+        android:fillColor="#00000000"
+        android:pathData="M19.3844 0H349.616C360.321 0 369 8.67871 369 19.3844V216.616C369 227.321 360.321 236 349.616 236H19.3844C8.67871 236 0 227.321 0 216.616V19.3844C0 8.67871 8.67871 0 19.3844 0Z" />
+
+    <!-- 그라데이션 배경 (라운드 경계 안에 들어오도록 동일 path 사용) -->
+    <path
+        android:pathData="M19.3844 0H349.616C360.321 0 369 8.67871 369 19.3844V216.616C369 227.321 360.321 236 349.616 236H19.3844C8.67871 236 0 227.321 0 216.616V19.3844C0 8.67871 8.67871 0 19.3844 0Z"
+        android:fillType="nonZero">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:fillAlpha="0.75"
+                android:centerX="184.5"
+                android:centerY="118"
+                android:gradientRadius="300">
+                <item
+                    android:offset="0"
+                    android:color="#B38ECA96" />
+                <item
+                    android:offset="1"
+                    android:color="#4D8ECA96" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+</vector>
