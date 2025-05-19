@@ -8,6 +8,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
