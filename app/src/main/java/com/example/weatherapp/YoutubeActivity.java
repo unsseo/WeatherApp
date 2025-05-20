@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class YoutubeActivity extends AppCompatActivity {
     private YouTubePlayerView youtubePlayerView;
-    private YouTubePlayer youTubePlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,11 +104,9 @@ public class YoutubeActivity extends AppCompatActivity {
     }
 
     private void openYouTubeLink(String videoId) {
-
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("https://www.youtube.com/watch?v=" + videoId));
         startActivity(webIntent);
-
     }
 
 }
