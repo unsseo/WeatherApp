@@ -92,35 +92,24 @@ public class YoutubeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<YouTubeSearchResponse> call, Throwable t) {
+            public void onFailure(Call<YouTubeSearchResponse>  call, Throwable t) {
                 Toast.makeText(YoutubeActivity.this, "백엔드 API 요청 실패", Toast.LENGTH_SHORT).show();
                 Log.e("RetrofitError", "API 요청 실패", t);
             }
         });
     }
 
-    // videoId로 영상 재생 (앱 있으면 앱으로, 없으면 내장 플레이어)
     private void showVideo(String videoId) {
-        // 유튜브 앱/웹으로 바로 이동
+        // 유튜브 웹으로 바로 이동
         openYouTubeLink(videoId);
     }
 
-    // 유튜브 앱(혹은 웹)으로 이동
     private void openYouTubeLink(String videoId) {
-        // 1) 웹 URL 사용 + 패키지 명시적 지정
-        Intent appIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("https://www.youtube.com/watch?v=" + videoId));
-        appIntent.setPackage("com.google.android.youtube"); // 핵심 수정 부분
 
-        // 2) 유튜브 앱이 있으면 실행
-        if (appIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(appIntent);
-        }
-        // 3) 없으면 웹으로 fallback
-        else {
-            Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://www.youtube.com/watch?v=" + videoId));
-            startActivity(webIntent);
-        }
+        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://www.youtube.com/watch?v=" + videoId));
+        startActivity(webIntent);
+
     }
+
 }
