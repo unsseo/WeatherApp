@@ -29,25 +29,36 @@ public class NetworkCheckActivity extends AppCompatActivity {
     }
 
     private boolean isInternetAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        if (connectivityManager != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Network network = connectivityManager.getActiveNetwork();
-                if (network != null) {
-                    NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
-                    if (capabilities != null) {
-                        // 실제 인터넷 연결이 가능한 네트워크인지 확인
-                        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                                && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
-                    }
-                }
-                return false;
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
+        if (connectivityManager == null) {
+            return false;
+        }
+
+        // Android M(23) 이상
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network network = connectivityManager.getActiveNetwork();
+            if (network != null) {
+                NetworkCapabilities capabilities =
+                        connectivityManager.getNetworkCapabilities(network);
+                return capabilities != null &&
+                        capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                        (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
             }
         }
+        // 이전 버전 (실행될 가능성 거의 없지만 코드 안전성 위해 추가)
+        else {
+            @SuppressWarnings("deprecation")
+            android.net.NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+
         return false;
     }
+
 
     private void checkNetworkAndUpdateUI() {
         if (isInternetAvailable()) {

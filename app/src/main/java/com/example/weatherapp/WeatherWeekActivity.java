@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.Manifest;
+import android.widget.Toast;
 
 
 public class WeatherWeekActivity extends AppCompatActivity {
@@ -89,23 +90,23 @@ public class WeatherWeekActivity extends AppCompatActivity {
         //홈화면에서 해야 됨, 배너 알림
 
         // Android 13 이상 권한 체크 및 요청
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                new UpdateWeatherBanner().showWeatherNotification(this, weatherType);
-            } else {
-                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
-            }
-        } else {
+        if (PermissionUtils.hasNotificationPermission(this)) {
             new UpdateWeatherBanner().showWeatherNotification(this, weatherType);
+        } else {
+            PermissionUtils.requestNotificationPermission(this);
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 101) {
+        if (requestCode == PermissionUtils.NOTIFICATION_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 new UpdateWeatherBanner().showWeatherNotification(this, weatherType);
+            } else {
+                // 사용자가 권한을 거부했을 때의 처리
+                Toast.makeText(this, "알림 표시 권한이 필요합니다", Toast.LENGTH_SHORT).show();
             }
         }
     }

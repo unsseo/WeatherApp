@@ -12,20 +12,30 @@ import android.os.Build;
 
 public class UpdateWeatherBanner {
 
-    public void showWeatherNotification(Context context, String weather) {
+    private static final String CHANNEL_ID = "weather_channel_id";
+
+    // 채널 생성 메소드 분리
+    private void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Weather Channel";
             String description = "Weather updates and notifications";
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("weather_channel_id", name, importance);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(channel);
             }
         }
+    }
 
+    public void showWeatherNotification(Context context, String weather) {
+        // 채널 생성
+        createNotificationChannel(context);
+
+        // Android 13 이상 권한 확인
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
