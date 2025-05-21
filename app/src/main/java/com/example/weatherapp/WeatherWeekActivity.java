@@ -84,6 +84,9 @@ public class WeatherWeekActivity extends AppCompatActivity {
             startActivity(youtubeintent);
         });
 
+        /*btnBack.setOnClickListener(v -> {
+            finish(); // 현재 액티비티 종료 → 바로 이전 화면으로 이동
+        });*/
 
 
 
