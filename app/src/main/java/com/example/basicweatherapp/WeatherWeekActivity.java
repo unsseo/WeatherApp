@@ -35,6 +35,13 @@ public class WeatherWeekActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_week);
 
+        if (!NetworkUtils.isInternetAvailable(this)) {
+            Intent intent = new Intent(this, NetworkCheckActivity.class);
+            intent.putExtra("returnActivity", WeatherWeekActivity.class.getName());
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         recyclerView = findViewById(R.id.recycler_view);
         btnBack = findViewById(R.id.btn_back);
@@ -89,10 +96,6 @@ public class WeatherWeekActivity extends AppCompatActivity {
             youtubeintent.putExtra("weather_type", weatherType); // 날씨 타입을 전달
             startActivity(youtubeintent);
         });
-
-
-
-
 
         //홈화면에서 해야 됨, 배너 알림
 

@@ -36,6 +36,14 @@ public class YoutubeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.youtube);
 
+        if (!NetworkUtils.isInternetAvailable(this)) {
+            Intent intent = new Intent(this, NetworkCheckActivity.class);
+            intent.putExtra("returnActivity", YoutubeActivity.class.getName());
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         youtubePlayerView = findViewById(R.id.youtube_player_view);
         btnOpenYoutube = findViewById(R.id.btn_open_youtube);
         btnBack = findViewById(R.id.btn_back);

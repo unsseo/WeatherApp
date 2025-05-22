@@ -15,11 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
 public class NetworkCheckActivity extends AppCompatActivity {
 
     private TextView noInternetMessage;
+    private String returnActivityName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network_check);
+
+        // 복귀할 액티비티 이름 받아오기
+        returnActivityName = getIntent().getStringExtra("returnActivity");
 
         Button retryButton = findViewById(R.id.retryButton);
         noInternetMessage = findViewById(R.id.noInternetMessage);
@@ -36,7 +40,6 @@ public class NetworkCheckActivity extends AppCompatActivity {
             return false;
         }
 
-        // Android M(23) 이상
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Network network = connectivityManager.getActiveNetwork();
             if (network != null) {
@@ -48,9 +51,7 @@ public class NetworkCheckActivity extends AppCompatActivity {
                                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
             }
-        }
-        // 이전 버전 (실행될 가능성 거의 없지만 코드 안전성 위해 추가)
-        else {
+        } else {
             @SuppressWarnings("deprecation")
             android.net.NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
             return activeNetworkInfo != null && activeNetworkInfo.isConnected();
@@ -59,14 +60,29 @@ public class NetworkCheckActivity extends AppCompatActivity {
         return false;
     }
 
-
     private void checkNetworkAndUpdateUI() {
         if (isInternetAvailable()) {
             noInternetMessage.setVisibility(View.INVISIBLE);
 
-            // 네트워크 연결되면 바로 WeatherWeekActivity로 이동 (더미 데이터 X)
-            Intent intent = new Intent(NetworkCheckActivity.this, WeatherWeekActivity.class);
-            startActivity(intent);
+            // 복귀할 액티비티로 이동
+            if (returnActivityName != null) {
+                try {
+                    Class<?> returnClass = Class.forName(returnActivityName);
+                    Intent intent = new Intent(NetworkCheckActivity.this, returnClass);
+                    // 필요하다면 기존 스택 정리
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    // 예외 발생 시 기본적으로 홈으로 이동
+                    Intent intent = new Intent(NetworkCheckActivity.this, HomeScreenActivity.class);
+                    startActivity(intent);
+                }
+            } else {
+                // 정보가 없으면 홈으로 이동
+                Intent intent = new Intent(NetworkCheckActivity.this, HomeScreenActivity.class);
+                startActivity(intent);
+            }
             finish();
         } else {
             noInternetMessage.setText("인터넷 연결이 여전히 필요합니다.");

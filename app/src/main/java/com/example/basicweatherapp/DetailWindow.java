@@ -2,6 +2,7 @@ package com.example.basicweatherapp;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,14 @@ public class DetailWindow extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        if (!NetworkUtils.isInternetAvailable(this)) {
+            Intent intent = new Intent(this, NetworkCheckActivity.class);
+            intent.putExtra("returnActivity", DetailWindow.class.getName());
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         dustCheckButton = findViewById(R.id.dust_check_button);
         textViewDate = findViewById(R.id.textView_date);

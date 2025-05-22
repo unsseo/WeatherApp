@@ -18,6 +18,15 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homescreen);  // 홈화면 XML
 
+        if (!NetworkUtils.isInternetAvailable(this)) {
+            Intent intent = new Intent(this, NetworkCheckActivity.class);
+            intent.putExtra("returnActivity", HomeScreenActivity.class.getName());
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+
         detailButton = findViewById(R.id.detail_information);
         regionButton = findViewById(R.id.weather_region);
         weeklyButton = findViewById(R.id.weekly_weather);
