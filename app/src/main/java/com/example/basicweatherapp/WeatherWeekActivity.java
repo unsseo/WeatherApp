@@ -3,6 +3,7 @@ package com.example.basicweatherapp;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -16,13 +17,15 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import android.Manifest;
 import android.widget.Toast;
+
+
 
 
 public class WeatherWeekActivity extends AppCompatActivity {
 
     private String weatherType;
+    private Button btnBack;
 
 
     @Override
@@ -32,7 +35,10 @@ public class WeatherWeekActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_week);
 
+
         recyclerView = findViewById(R.id.recycler_view);
+        btnBack = findViewById(R.id.btn_back);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         String[] allDays = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
@@ -84,9 +90,7 @@ public class WeatherWeekActivity extends AppCompatActivity {
             startActivity(youtubeintent);
         });
 
-        /*btnBack.setOnClickListener(v -> {
-            finish(); // 현재 액티비티 종료 → 바로 이전 화면으로 이동
-        });*/
+
 
 
 
@@ -98,6 +102,13 @@ public class WeatherWeekActivity extends AppCompatActivity {
         } else {
             PermissionUtils.requestNotificationPermission(this);
         }
+
+
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(WeatherWeekActivity.this, HomeScreenActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        });
     }
 
     @Override

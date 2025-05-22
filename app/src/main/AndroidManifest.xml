@@ -22,7 +22,7 @@
 
         <!-- 메인 액티비티 (시작점) -->
         <activity
-            android:name=".NetworkCheckActivity"
+            android:name=".HomeScreenActivity"
             android:theme="@style/Theme.Basicweatherapp"
             android:exported="true">
             <intent-filter>
@@ -32,9 +32,15 @@
         </activity>
 
         <!-- 네트워크 체크 액티비티 -->
+
+        <activity
+            android:name=".NetworkCheckActivity"
+            android:exported="true" />
+
         <activity
             android:name=".DetailWindow"
             android:exported="true" />
+
 
         <!-- 기타 액티비티들 -->
         <activity
@@ -45,9 +51,6 @@
             android:exported="true" />
         <activity
             android:name=".YoutubeActivity"
-            android:exported="true" />
-        <activity
-            android:name=".HomeScreenActivity"
             android:exported="true" />
 
     </application>

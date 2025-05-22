@@ -70,11 +70,11 @@ public class YoutubeActivity extends AppCompatActivity {
         });
 
         // 첫 화면(MainActivity)으로 이동
-        /* btnHome.setOnClickListener(v -> {
-            Intent intent = new Intent(YoutubeActivity.this, MainActivity.class);
+         btnHome.setOnClickListener(v -> {
+            Intent intent = new Intent(YoutubeActivity.this, HomeScreenActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-        });*/
+        });
     }
 
     private void fetchVideosFromBackend(String query) {
