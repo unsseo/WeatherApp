@@ -23,7 +23,7 @@ android {
     defaultConfig {
         applicationId = "com.example.basicweatherapp"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -49,7 +49,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -58,4 +57,14 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // 최신 버전으로 업데이트
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0") // 11.1.0 → 12.0.0
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")         // 2.9.0 → 2.11.0
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")   // 2.9.0 → 2.11.0
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")             // 4.9.3 → 4.12.0
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")// 4.9.3 → 4.12.0
+
+    //implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")       // 유지
+    // implementation("androidx.core:core:1.13.0") ← 충돌 가능성 있으므로 제거
 }
