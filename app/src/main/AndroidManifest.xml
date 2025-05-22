@@ -20,23 +20,31 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-
-        <!-- 병합된 액티비티들 -->
-        <activity android:name=".WeatherWeekActivity" android:exported="true" />
-        <activity android:name=".BannerActivity" android:exported="true" />
-        <activity android:name=".YoutubeActivity" android:exported="true" />
-
-        <!-- 당신의 MainActivity를 런처로 설정 -->
+        <!-- 팀원 앱의 Launcher 액티비티 -->
         <activity
-            android:name=".MainActivity"
+            android:name=".NetworkCheckActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".WeatherWeekActivity"
+            android:exported="true" />
+        <activity
+            android:name=".BannerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".YoutubeActivity"
+            android:exported="true" />
+
+        <!-- 당신의 MainActivity도 추가 -->
+        <activity
+            android:name=".DetailWindow"
             android:label="@string/app_name"
             android:theme="@style/Theme.Basicweatherapp"
-            android:exported="true">
+            android:exported="true"/>
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.category.LAUNCHER" >
+                </action>
             </intent-filter>
-        </activity>
-
     </application>
 </manifest>
