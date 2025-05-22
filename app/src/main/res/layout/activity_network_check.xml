@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/weather_bg"
+    >
 
     <TextView
         android:id="@+id/noInternetMessage"
@@ -21,5 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="다시 시도"
+        android:backgroundTint="#8DC3B8"
         android:layout_marginTop="20dp"/>
 </LinearLayout>
