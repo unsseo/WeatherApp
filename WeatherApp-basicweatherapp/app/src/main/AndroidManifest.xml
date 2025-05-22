@@ -20,23 +20,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <!-- 메인 액티비티 (시작점) -->
+        <!-- 팀원 앱의 Launcher 액티비티 -->
         <activity
             android:name=".NetworkCheckActivity"
-            android:theme="@style/Theme.Basicweatherapp"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-
-        <!-- 네트워크 체크 액티비티 -->
-        <activity
-            android:name=".DetailWindow"
-            android:exported="true" />
-
-        <!-- 기타 액티비티들 -->
         <activity
             android:name=".WeatherWeekActivity"
             android:exported="true" />
@@ -47,5 +35,16 @@
             android:name=".YoutubeActivity"
             android:exported="true" />
 
+        <!-- 당신의 MainActivity도 추가 -->
+        <activity
+            android:name=".DetailWindow"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Basicweatherapp"
+            android:exported="true"/>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.category.LAUNCHER" >
+                </action>
+            </intent-filter>
     </application>
 </manifest>
