@@ -14,7 +14,7 @@ import androidx.annotation.RequiresApi;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class MainActivity extends Activity {
+public class DetailWindow extends Activity {
 
     private Button dustCheckButton;
     private TextView textViewDate;
