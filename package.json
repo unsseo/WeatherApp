@@ -1,7 +1,13 @@
 {
+  "dependencies": {
+    "axios": "^1.9.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "firebase-functions": "^6.3.2"
+  },
   "name": "weatherapp",
   "version": "1.0.0",
-  "description": "A weather app that shows current weather and forecasts",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,13 +16,12 @@
     "type": "git",
     "url": "git+https://github.com/unsseo/WeatherApp.git"
   },
-  "keywords": [
-    "weather"
-  ],
-  "author": "hyelin",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/unsseo/WeatherApp/issues"
   },
-  "homepage": "https://github.com/unsseo/WeatherApp#readme"
+  "homepage": "https://github.com/unsseo/WeatherApp#readme",
+  "description": ""
 }
