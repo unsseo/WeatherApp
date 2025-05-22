@@ -46,6 +46,9 @@
         <activity
             android:name=".YoutubeActivity"
             android:exported="true" />
+        <activity
+            android:name=".HomeScreenActivity"
+            android:exported="true" />
 
     </application>
 </manifest>

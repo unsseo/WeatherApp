@@ -2,17 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main"
     android:background="@drawable/weather_background"
     >
 
-    <!-- ActionBar 영역 -->
-
-    <!-- 배경 이미지 - ActionBar 아래부터 전체 배경 -->
+    <!-- 배경 이미지  -->
     <ImageView
-        android:id="@+id/img_7144"
+        android:id="@+id/weather_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -21,12 +20,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- 위치(공릉동) 및 아이콘 -->
-
-
-    <!-- 온도(12°) -->
-
     <!-- 최고/최저 기온 -->
+
+    <!-- 현재 온도 -->
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="16°"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="49dp"
+        tools:layout_editor_absoluteY="173dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="77dp"
+        tools:layout_editor_absoluteY="173dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7°"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="93dp"
+        tools:layout_editor_absoluteY="173dp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -49,16 +72,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView"
         app:srcCompat="@drawable/location" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="16° / 7°"
-        android:textColor="#444"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+    <!-- 위치(공릉동) 및 아이콘 -->
 
     <TextView
         android:id="@+id/textView"
@@ -74,18 +88,17 @@
 
     <!-- 온도 그래프 영역 -->
 
-    <!-- 날짜/시간 레이블들 -->
-
     <ImageView
         android:id="@+id/tempGraph"
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="24dp"
         android:src="@drawable/graph"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView3" />
+        tools:layout_editor_absoluteY="224dp" />
+
+    <!-- 온도 레이블-->
 
     <LinearLayout
         android:id="@+id/timeLabels"
@@ -142,7 +155,7 @@
     <!-- 버튼 그룹 - 하단에 위치 -->
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/detail_information"
         android:layout_width="170dp"
         android:layout_height="63dp"
         android:layout_marginHorizontal="32dp"
@@ -156,17 +169,17 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:cornerRadius="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/weekly_weather"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/weather_region"
         android:layout_width="172dp"
         android:layout_height="63dp"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="64dp"
         android:backgroundTint="#71A78F"
         android:elevation="4dp"
         android:paddingHorizontal="24dp"
@@ -178,11 +191,11 @@
         app:cornerRadius="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/weekly_weather"
         android:layout_width="175dp"
         android:layout_height="65dp"
         android:layout_marginHorizontal="32dp"
@@ -191,15 +204,16 @@
         android:elevation="4dp"
         android:paddingHorizontal="24dp"
         android:paddingVertical="12dp"
-        android:text="월별 날씨"
+        android:text="주간 날씨"
         android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
         app:cornerRadius="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/weather_region"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
