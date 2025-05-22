@@ -25,6 +25,14 @@ public class HomeScreenActivity extends AppCompatActivity {
             finish();
             return;
         }
+        //홈화면에서 해야 됨, 배너 알림
+        String weatherType = WeatherUtils.getTodayWeatherType(this);
+        // Android 13 이상 권한 체크 및 요청
+        if (PermissionUtils.hasNotificationPermission(this)) {
+            new UpdateWeatherBanner().showWeatherNotification(this, weatherType);
+        } else {
+            PermissionUtils.requestNotificationPermission(this);
+        }
 
 
         detailButton = findViewById(R.id.detail_information);
