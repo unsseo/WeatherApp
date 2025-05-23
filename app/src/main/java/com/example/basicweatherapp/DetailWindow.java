@@ -1,81 +1,39 @@
-package com.example.basicweatherapp;
+@RequiresApi(api = Build.VERSION_CODES.O)
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_details);
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+    if (!NetworkUtils.isInternetAvailable(this)) {
+        Intent intent = new Intent(this, NetworkCheckActivity.class);
+        intent.putExtra("returnActivity", DetailWindow.class.getName());
+        startActivity(intent);
+        finish();
+        return;
+    }
 
-import androidx.annotation.RequiresApi;
+    dustCheckButton = findViewById(R.id.dust_check_button);
+    textViewDate = findViewById(R.id.textView_date);
+    Button homeButton = findViewById(R.id.home_button); 
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+    // 오늘 날짜 세팅
+    String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
+    textViewDate.setText(today);
 
-public class DetailWindow extends Activity {
+    dustCheckButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showDustPopup();
+        }
+    });
 
-    private Button dustCheckButton;
-    private TextView textViewDate;
-
-    private Dialog dustDialog;
-    private Handler handler = new Handler();
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
-
-        if (!NetworkUtils.isInternetAvailable(this)) {
-            Intent intent = new Intent(this, NetworkCheckActivity.class);
-            intent.putExtra("returnActivity", DetailWindow.class.getName());
+    homeButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(DetailWindow.this, HomeScreenActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
-            return;
         }
-
-        dustCheckButton = findViewById(R.id.dust_check_button);
-        textViewDate = findViewById(R.id.textView_date);
-
-        // 오늘 날짜 세팅
-        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
-        textViewDate.setText(today);
-
-        dustCheckButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDustPopup();
-            }
-        });
-    }
-
-    private void showDustPopup() {
-        dustDialog = new Dialog(this);
-        dustDialog.setContentView(R.layout.dust_popup);
-        dustDialog.setCancelable(true);
-        dustDialog.show();
-
-        // 6초 후 팝업 자동 닫기
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (dustDialog != null && dustDialog.isShowing()) {
-                    dustDialog.dismiss();
-                }
-            }
-        }, 6000);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 액티비티 종료 시 핸들러 콜백 정리
-        handler.removeCallbacksAndMessages(null);
-        if (dustDialog != null && dustDialog.isShowing()) {
-            dustDialog.dismiss();
-        }
-    }
+    });
 }
