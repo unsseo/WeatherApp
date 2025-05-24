@@ -40,13 +40,13 @@ public class HomeScreenActivity extends AppCompatActivity {
         weeklyButton = findViewById(R.id.weekly_weather);
 
         // 상세 정보 버튼 클릭 시 activity_details.xml로 이동
-        detailButton.setOnClickListener(new View.OnClickListener() {
+       /* detailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeScreenActivity.this, DetailWindow.class);
                 startActivity(intent);
             }
-        });
+        }); */
 
         // 지역별 날씨 버튼 클릭 시 weather_map.xml로 이동
         regionButton.setOnClickListener(new View.OnClickListener() {
