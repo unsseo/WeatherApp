@@ -1,0 +1,93 @@
+package com.example.basicweatherapp;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class HomeScreenActivity extends AppCompatActivity {
+
+    private Button detailButton;
+    private Button regionButton;
+    private Button weeklyButton;
+
+    private TextView currentTempView;
+    private TextView highTempView;
+    private TextView lowTempView;
+    private TextView locationView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.homescreen);  // 홈화면 XML
+
+        if (!NetworkUtils.isInternetAvailable(this)) {
+            Intent intent = new Intent(this, NetworkCheckActivity.class);
+            intent.putExtra("returnActivity", HomeScreenActivity.class.getName());
+            startActivity(intent);
+            finish();
+            return;
+        }
+        //홈화면에서 해야 됨, 배너 알림
+        String weatherType = WeatherUtils.getTodayWeatherType(this);
+        // Android 13 이상 권한 체크 및 요청
+        if (PermissionUtils.hasNotificationPermission(this)) {
+            new UpdateWeatherBanner().showWeatherNotification(this, weatherType);
+        } else {
+            PermissionUtils.requestNotificationPermission(this);
+        }
+
+        // 1. TextView 연결
+        currentTempView = findViewById(R.id.textView2);
+        highTempView = findViewById(R.id.textView3);
+        lowTempView = findViewById(R.id.textView4);
+        locationView = findViewById(R.id.textView);
+
+        // 2. String 변수로 데이터 준비 (예시)
+        String currentTemp = "12°";
+        String highTemp = "16°";
+        String lowTemp = "7°";
+        String location = "공릉동";
+
+        // 3. TextView에 텍스트 세팅
+        currentTempView.setText(currentTemp);
+        highTempView.setText(highTemp);
+        lowTempView.setText(lowTemp);
+        locationView.setText(location);
+
+        detailButton = findViewById(R.id.detail_information);
+        regionButton = findViewById(R.id.weather_region);
+        weeklyButton = findViewById(R.id.weekly_weather);
+
+        // 상세 정보 버튼 클릭 시 activity_details.xml로 이동
+        detailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreenActivity.this, DetailWindow.class);
+                startActivity(intent);
+            }
+        });
+
+        // 지역별 날씨 버튼 클릭 시 weather_map.xml로 이동
+        regionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreenActivity.this, WeatherMap.class);
+                startActivity(intent);
+            }
+        });
+
+        // 주간 날씨 버튼 클릭 시 weather_week.xml로 이동
+        weeklyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreenActivity.this, WeatherWeekActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+}
