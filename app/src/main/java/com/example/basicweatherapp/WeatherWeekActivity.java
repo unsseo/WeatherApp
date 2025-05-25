@@ -85,10 +85,10 @@ public class WeatherWeekActivity extends AppCompatActivity {
         weatherType = getWeatherTypeFromIcon(todayIconResId);
 
         // 알림(배너)만 노출
-        Intent bannerintent = new Intent(this, BannerActivity.class);
+        /* Intent bannerintent = new Intent(this, BannerActivity.class);
         bannerintent.putExtra("weather_type", weatherType); // "sunny", "cloudy" 등
         //startActivity(bannerintent);
-        new UpdateWeatherBanner().showWeatherNotification(this, weatherType);
+        new UpdateWeatherBanner().showWeatherNotification(this, weatherType); */
 
         Button btnOpenYoutube = findViewById(R.id.btn_open_youtube);
         btnOpenYoutube.setOnClickListener(v -> {
