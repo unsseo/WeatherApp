@@ -3,8 +3,8 @@ package com.example.basicweatherapp;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,16 +17,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import android.widget.Toast;
-
-
-
-
 public class WeatherWeekActivity extends AppCompatActivity {
 
     private String weatherType;
     private Button btnBack;
 
+    // 위치 정보 변수 추가
+    private double currentLatitude = 0.0;
+    private double currentLongitude = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +40,23 @@ public class WeatherWeekActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        // 위치 정보 받아오기
+        LocationUtil.getCurrentLocation(this, new LocationUtil.LocationResultListener() {
+            @Override
+            public void onLocationResult(double latitude, double longitude) {
+                currentLatitude = latitude;
+                currentLongitude = longitude;
+                Toast.makeText(WeatherWeekActivity.this,
+                        "현재 위치\n위도: " + latitude + "\n경도: " + longitude,
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLocationFailed(String message) {
+                Toast.makeText(WeatherWeekActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         recyclerView = findViewById(R.id.recycler_view);
         btnBack = findViewById(R.id.btn_back);
@@ -84,21 +99,12 @@ public class WeatherWeekActivity extends AppCompatActivity {
         int todayIconResId = todayWeather.getIconResId();
         weatherType = getWeatherTypeFromIcon(todayIconResId);
 
-        // 알림(배너)만 노출
-        /* Intent bannerintent = new Intent(this, BannerActivity.class);
-        bannerintent.putExtra("weather_type", weatherType); // "sunny", "cloudy" 등
-        //startActivity(bannerintent);
-        new UpdateWeatherBanner().showWeatherNotification(this, weatherType); */
-
         Button btnOpenYoutube = findViewById(R.id.btn_open_youtube);
         btnOpenYoutube.setOnClickListener(v -> {
             Intent youtubeintent = new Intent(WeatherWeekActivity.this, YoutubeActivity.class);
             youtubeintent.putExtra("weather_type", weatherType); // 날씨 타입을 전달
             startActivity(youtubeintent);
         });
-
-
-
 
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(WeatherWeekActivity.this, HomeScreenActivity.class);
@@ -107,16 +113,26 @@ public class WeatherWeekActivity extends AppCompatActivity {
         });
     }
 
+    // 위치 및 알림 권한 처리
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PermissionUtils.NOTIFICATION_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                new UpdateWeatherBanner().showWeatherNotification(this, weatherType);
+        if (requestCode == 1001) { // LocationUtil의 requestCode와 동일하게!
+            if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                // 권한이 허용되면 다시 위치 요청
+                LocationUtil.getCurrentLocation(this, new LocationUtil.LocationResultListener() {
+                    @Override
+                    public void onLocationResult(double latitude, double longitude) {
+                        currentLatitude = latitude;
+                        currentLongitude = longitude;
+                    }
+                    @Override
+                    public void onLocationFailed(String message) {
+                        Toast.makeText(WeatherWeekActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
             } else {
-                // 사용자가 권한을 거부했을 때의 처리
-                Toast.makeText(this, "알림 표시 권한이 필요합니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "위치 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -148,5 +164,4 @@ public class WeatherWeekActivity extends AppCompatActivity {
         if (iconResId == R.drawable.ic_weather_snow) return "snow";
         return "sunny";
     }
-
 }
