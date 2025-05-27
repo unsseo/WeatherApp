@@ -170,7 +170,6 @@ private void fetchNearbyStations(String tmX,String tmY){
             @Override
             public void onFailure(@NonNull Call<AirQualityResponse> call, @NonNull Throwable t) {
                 Log.e("DetailWindow", "주변 측정소 API 통신 오류: " + t.getMessage(), t);
-                Toast.makeText(DetailWindow.this, "네트워크 오류 (주변 측정소): " + t.getMessage(), Toast.LENGTH_LONG).show();
                 fetchAirQualityByStationName("강남구");
             }
         });
