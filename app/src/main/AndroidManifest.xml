@@ -54,6 +54,13 @@
         <activity
             android:name=".YoutubeActivity"
             android:exported="true" />
+        <activity
+            android:name=".WeatherMap"
+            android:exported="true" />
+
+        <!-- 카카오맵 api 네이티브키-->
+        <meta-data android:name="com.kakao.vectormap.APP_KEY"
+            android:value="7e824790782e5e9289f5169dc0ecb446" />
 
     </application>
 </manifest>

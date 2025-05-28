@@ -66,5 +66,6 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")// 4.9.3 → 4.12.0
 
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.kakao.maps.open:android:2.12.14")
 
 }
