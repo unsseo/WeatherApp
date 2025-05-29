@@ -12,8 +12,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.OnFailureListener;
+
 
 public class LocationUtil {
 
@@ -50,23 +49,6 @@ public class LocationUtil {
                                 .setMaxUpdates(1)
                                 .build();
 
-                        fusedLocationClient.requestLocationUpdates(
-                                locationRequest,
-                                new LocationCallback() {
-                                    @Override
-                                    public void onLocationResult(LocationResult locationResult) {
-                                        if (locationResult == null || locationResult.getLastLocation() == null) {
-                                            listener.onLocationFailed("실시간 위치 정보를 가져올 수 없습니다.");
-                                        } else {
-                                            Location loc = locationResult.getLastLocation();
-                                            listener.onLocationResult(loc.getLatitude(), loc.getLongitude());
-                                        }
-                                        // 위치 업데이트 중지
-                                        fusedLocationClient.removeLocationUpdates(this);
-                                    }
-                                },
-                                activity.getMainLooper()
-                        );
                     }
                 })
                 .addOnFailureListener(activity, e -> listener.onLocationFailed("위치 정보 오류: " + e.getMessage()));
