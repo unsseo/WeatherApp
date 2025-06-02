@@ -201,7 +201,7 @@ private void fetchNearbyStations(String tmX,String tmY){
 
                         runOnUiThread(() -> {
                             String pm10Value = item.getPm10Value();
-                            String pm10GradeText = convertGradeToText(item.getPm10Grade());
+                            String pm10GradeText = convertGradeToText(item.getPm10Value()); // item.getPm10Value() 사용
 
                             if (pm10Value == null || pm10Value.isEmpty() || pm10Value.equals("-")) {
                                 pm10Value = "정보 없음";
@@ -233,17 +233,25 @@ private void fetchNearbyStations(String tmX,String tmY){
         });
     }
     private String convertGradeToText(String grade) {
-        if (grade == null || grade.isEmpty() || grade.equals("-")) return "정보 없음";
+        if (grade == null || grade.isEmpty() || grade.equals("-")) {
+            return "정보 없음";
+        }
         try {
-            int gradeInt = Integer.parseInt(grade);
-            switch (gradeInt) {
-                case 1: return "좋음";
-                case 2: return "보통";
-                case 3: return "나쁨";
-                case 4: return "매우나쁨";
-                default: return "알 수 없음";
+            int pm10Value = Integer.parseInt(grade); // 'grade'는 실제 PM10 수치를 나타냄
+
+            if (pm10Value >= 0 && pm10Value <= 30) {
+                return "좋음";
+            } else if (pm10Value >= 31 && pm10Value <= 80) {
+                return "보통";
+            } else if (pm10Value >= 81 && pm10Value <= 150) {
+                return "나쁨";
+            } else if (pm10Value > 150) {
+                return "매우나쁨";
+            } else {
+                return "알 수 없음"; // 음수 값 등 예외 처리
             }
         } catch (NumberFormatException e) {
+            // 'grade'가 숫자로 변환할 수 없는 문자열인 경우 (예: "정보 없음" 등)
             Log.e("DetailWindow", "등급 변환 오류: " + grade, e);
             return "알 수 없음";
         }
