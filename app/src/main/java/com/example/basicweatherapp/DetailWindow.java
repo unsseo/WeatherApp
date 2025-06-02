@@ -201,7 +201,7 @@ private void fetchNearbyStations(String tmX,String tmY){
 
                         runOnUiThread(() -> {
                             String pm10Value = item.getPm10Value();
-                            String pm10GradeText = convertGradeToText(item.getPm10Grade());
+                            String pm10GradeText = convertGradeToText(item.getPm10Value()); // item.getPm10Value() 사용
 
                             if (pm10Value == null || pm10Value.isEmpty() || pm10Value.equals("-")) {
                                 pm10Value = "정보 없음";
